@@ -1,6 +1,11 @@
-An App Script I wrote in collaboration with Chatgpt to create a Custom Conditional Format to visually track capacity days at our school (>100 employees) based on Staff PTO requests (around 3000 requests). It highlights the "Day Off Requested" column in bold and colors it orange or red if there are three or more requests for a particular date from certain schools. (Ex. If the middle school had 3 approved requests for a certain date, the date would bold and turn red. If the middle school had 3 approved requests, the date would bold and turn orange.)
+An App Script I wrote in collaboration with Chatgpt to create a Custom Conditional Format to visually track 
+capacity days at our school (>100 employees) based on Staff PTO requests (around 3000 requests). It highlights 
+the "Day Off Requested" column in bold and colors it orange or red if there are three or more requests for a 
+particular date from certain schools. (Ex. If the middle school had 3 approved requests for a certain date, the 
+date would bold and turn red. If the middle school had 3 approved requests, the date would bold and turn orange.)
 
-The formatting helps to easily spot high request dates and different school categories. Additionally, the script updates the formatting in real-time whenever the sheet is edited, ensuring the information is always current.
+The formatting helps to easily spot high request dates and different school categories. Additionally, the script 
+updates the formatting in real-time whenever the sheet is edited, ensuring the information is always current.
 ----------------------------------------------------------------------------------------
 
 var SHEET_NAME = "FORM"; // Change to your sheet name
