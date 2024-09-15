@@ -1,0 +1,77 @@
+var SHEET_NAME = "FORM"; // Change to your sheet name
+
+function applyConditionalFormatting() {
+  var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = spreadsheet.getSheetByName(SHEET_NAME);
+  var dataRange = sheet.getRange(2, 1, sheet.getLastRow() - 1, 17); // Include all columns up to column P
+  var dataValues = dataRange.getValues();
+  
+  var dateCounter = {};
+  var schoolCounts = {};
+
+  for (var i = 0; i < dataValues.length; i++) {
+    var school = dataValues[i][5]; // Column E (School Affiliation)
+    var dateValue = dataValues[i][6]; // Column F (Day Off Requested)
+    var approval = dataValues[i][12]; // Column L (APPROVAL)
+    
+    if (school && dateValue && approval && approval !== "NO - NOT TAKING") {
+      var parsedDate = new Date(dateValue);
+      
+      if (!isNaN(parsedDate) && parsedDate.toString() !== "Invalid Date") {
+        var dateString = parsedDate.toDateString();
+
+        if (!dateCounter[dateString]) {
+          dateCounter[dateString] = 1;
+        } else {
+          dateCounter[dateString]++;
+        }
+
+        if (!schoolCounts[school]) {
+          schoolCounts[school] = {};
+        }
+
+        if (!schoolCounts[school][dateString]) {
+          schoolCounts[school][dateString] = 1;
+        } else {
+          schoolCounts[school][dateString]++;
+        }
+      }
+    }
+  }
+
+  for (var i = 0; i < dataValues.length; i++) {
+    var school = dataValues[i][5]; // Column E (School Affiliation)
+    var dateValue = dataValues[i][6]; // Column F (Day Off Requested)
+    var approval = dataValues[i][12]; // Column L (APPROVAL)
+    
+    if (school && dateValue && approval && approval !== "NO - NOT TAKING") {
+      var parsedDate = new Date(dateValue);
+      var dateString = parsedDate.toDateString();
+      var cell = sheet.getRange(i + 2, 7); // Column F (Day Off Requested)
+      var schoolCell = sheet.getRange(i + 2, 6); // Column E (School Affiliation)
+
+      if (schoolCounts[school][dateString] >= 3) {
+        if (school === "KALE K-4") {
+          cell.setFontWeight("bold");
+          cell.setFontColor("#ffa51e"); // Lighter orange color
+        } else if (school === "KAL 5-8") {
+          cell.setFontWeight("bold");
+          cell.setFontColor("red");
+        }
+      } else {
+        cell.setFontWeight("normal");
+        cell.setFontColor("black"); // Assuming you want the text color to be black
+      }
+      
+      schoolCell.setFontColor("black"); // Reset the font color of the School Affiliation cell
+    } else {
+      var cell = sheet.getRange(i + 2, 7); // Column F (Day Off Requested)
+      cell.setFontWeight("normal");
+      cell.setFontColor("black"); // Reset text formatting
+    }
+  }
+}
+
+function onEdit(e) {
+  applyConditionalFormatting();
+}
